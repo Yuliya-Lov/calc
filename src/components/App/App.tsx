@@ -17,8 +17,7 @@ function App() {
   return (
     <CurrentThemeContext.Provider value={theme}>
       <div className={`app app_theme_${theme}`}>
-        <button onClick={changeTheme}>changeTheme</button>
-        <CalcShell theme={theme}/>
+        <CalcShell theme={theme} changeTheme={changeTheme}/>
       </div>
     </CurrentThemeContext.Provider>
   )
