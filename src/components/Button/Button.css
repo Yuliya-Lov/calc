@@ -1,0 +1,50 @@
+.button {
+  margin: 0;
+  padding: 0;
+  width: 64px;
+  height: 64px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: 300;
+  letter-spacing: -0.2px;
+  transition: transform .5s ease;
+}
+
+.button_theme_light {
+  color: #121212;
+  background: #F4F4F4;
+  box-shadow: -6.25px -6.25px 12.5px 0px #FFF, 6.25px 6.25px 12.5px 0px #E1EDFA;
+}
+
+.button_theme_dark {
+  color: #F6F6F6;
+  background: #2B2D2E;
+  box-shadow: -8px -8px 16px 0px #222627, 8px 8px 16px 0px #222627;
+}
+
+.button:hover {
+  transform: translate(0, 3px);
+  transition: transform .5s ease;
+}
+
+.button_theme_light:hover {
+  border: 2px solid #E5EFFA;
+}
+
+.button_theme_dark:hover {
+  border: 2px solid #2B2D2E;
+}
+
+.button_theme_light:active {
+  background: #E1EDFA;
+}
+
+.button_theme_dark:active {
+  background: #E1EDFA;
+}
+
+.button_theme_dark:active {
+  background: #262829;
+}
