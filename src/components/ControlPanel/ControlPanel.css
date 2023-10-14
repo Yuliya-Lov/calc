@@ -1,0 +1,43 @@
+.panel {
+  width: 100%;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+padding-bottom: 6px;
+}
+.panel__button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-width: 35px;
+  min-height: 35px;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 24px 24px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.panel__button_type_history {
+  background-image: url(../../assets/history-icon.svg);
+}
+.panel__button_type_delete {
+  background-image: url(../../assets/clear-icon.svg);
+}
+
+.panel__button:active {
+  transform: translate(0, 1px);
+  transition: transform .3s ease;
+}
+
+.panel__button_theme_light:hover {
+  box-shadow: -6.25px -6.25px 12.5px 0px #FFF, 6.25px 6.25px 12.5px 0px #E1EDFA;
+  border: 2px solid #E5EFFA;
+  background-color: #E1EDFA;
+}
+
+.panel__button_theme_dark:hover {
+  border: 2px solid #2B2D2E;
+  box-shadow: -8px -8px 16px 0px #222627, 8px 8px 16px 0px #222627;
+}

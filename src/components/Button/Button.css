@@ -12,7 +12,7 @@
   font-size: 25px;
   font-weight: 300;
   letter-spacing: -0.2px;
-  transition: transform .5s ease;
+  transition: transform .3s ease;
 }
 
 .button_theme_light {
@@ -27,23 +27,17 @@
   box-shadow: -8px -8px 16px 0px #222627, 8px 8px 16px 0px #222627;
 }
 
-.button:hover {
+.button:active {
   transform: translate(0, 3px);
-  transition: transform .5s ease;
+  transition: transform .3s ease;
 }
 
 .button_theme_light:hover {
+  background: #E1EDFA;
   border: 2px solid #E5EFFA;
 }
 
 .button_theme_dark:hover {
-  border: 2px solid #2B2D2E;
-}
-
-.button_theme_light:active {
-  background: #E1EDFA;
-}
-
-.button_theme_dark:active {
   background: #262829;
+  border: 2px solid #2B2D2E;
 }

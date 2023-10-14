@@ -18,28 +18,28 @@ function ButtonArea({ theme }: { theme: string }) {
     { value: '%' },
     {
       label: division,
-      value: '/'
+      value: ' / '
     },
     { value: '7' },
     { value: '8' },
     { value: '9' },
     {
       label: multiplication,
-      value: '*'
+      value: ' * '
     },
     { value: '4' },
     { value: '5' },
     { value: '6' },
     {
       label: subtraction,
-      value: '-'
+      value: ' - '
     },
     { value: '1' },
     { value: '2' },
     { value: '3' },
     {
       label: addition,
-      value: '+'
+      value: ' + '
     },
     {
       value: '+/-'
@@ -48,10 +48,10 @@ function ButtonArea({ theme }: { theme: string }) {
     { value: '.' },
     {
       label: equal,
-      value: '='
+      value: ' = '
     }]
   return (
-    <section aria-label='Кнопки' className='button-area'>
+    <section aria-label='Кнопки' className={`button-area button-area_theme_${theme}`}>
       {buttonArr.map((item, index) => {
         return <Button  key={index} theme={theme} content={item}/>
       })}

@@ -1,13 +1,10 @@
 import React from 'react';
 import './CalcShell.css';
-import Screen from '../Screen/Screen';
-import ButtonArea from '../ButtonArea/ButtonArea';
 
-function CalcShell({theme, changeTheme }: {theme:string, changeTheme(): void}) {
+function CalcShell({theme, children}:{theme:string, children: Array<React.ReactNode>}) {
     return (
         <main className={`calc-shell calc-shell_theme_${theme}`}>
-            <Screen theme={theme} changeTheme={changeTheme}/>
-            <ButtonArea theme={theme}/>
+          {children}
         </main>
     );
 }

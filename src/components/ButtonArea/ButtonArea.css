@@ -4,5 +4,14 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
+  padding-top: 17px;
   gap: 10px;
+}
+
+.button-area_theme_light {
+  border-top: 1px solid #E5EFFA;
+}
+
+.button-area_theme_dark {
+  border-top: 1px solid #9A9B9B;
 }
