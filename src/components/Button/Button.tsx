@@ -2,9 +2,9 @@ import React from 'react';
 import './Button.css';
 import {Content} from '../../types/intefaces';
 
-function Button({theme, content}: {theme: string, content: Content}) {
+function Button({theme, content, handleSimbol}: {theme: string, content: Content, handleSimbol(e:React.MouseEvent<HTMLButtonElement>): void}) {
     return (
-        <button className={`button button_visual_${content.visual} button_theme_${theme}`}>{
+        <button type="button" value={content.value} onClick={handleSimbol} className={`button button_visual_${content.visual} button_theme_${theme}`}>{
           content.label
           ? <img src={content.label} alt={content.value}/>
           : content.value}

@@ -21,7 +21,7 @@ export const buttonArr: Array<Content> = [
   {
     visual: 'blue',
     label: division,
-    value: ' / '
+    value: '/'
   },
   {
     visual: 'standart',
@@ -38,7 +38,7 @@ export const buttonArr: Array<Content> = [
   {
     visual: 'blue',
     label: multiplication,
-    value: ' * '
+    value: '*'
   },
   {
     visual: 'standart',
@@ -55,7 +55,7 @@ export const buttonArr: Array<Content> = [
   {
     visual: 'blue',
     label: subtraction,
-    value: ' - '
+    value: '-'
   },
   {
     visual: 'standart',
@@ -72,7 +72,7 @@ export const buttonArr: Array<Content> = [
   {
     visual: 'blue',
     label: addition,
-    value: ' + '
+    value: '+'
   },
   {
     visual: 'standart',
@@ -91,3 +91,9 @@ export const buttonArr: Array<Content> = [
     label: equal,
     value: '='
   }]
+
+  export const nums: Array<string> = ['0', '00', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
+  export const actions: Array<string> = ['+', '-', '*', '/', 'C'];
+  export const converters: Array<string> = ['+/-', '%'];
+
+  export const cleaner:string = 'C';
