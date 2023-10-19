@@ -12,7 +12,7 @@
   font-size: 25px;
   font-weight: 300;
   letter-spacing: -0.2px;
-  transition: transform .3s ease;
+  transition: transform .1s ease;
 }
 
 .button_theme_light {
@@ -29,7 +29,19 @@
 
 .button:active {
   transform: translate(0, 3px);
-  transition: transform .3s ease;
+  transition:  transform .1s ease;
+}
+
+.button_visual_red {
+  color: #D6152E;
+}
+
+.button_visual_blue {
+  color: #64A7EC;
+}
+
+.button_visual_blue-background {
+  background: #64A7EC;
 }
 
 .button_theme_light:hover {
@@ -40,4 +52,9 @@
 .button_theme_dark:hover {
   background: #262829;
   border: 2px solid #2B2D2E;
+}
+
+.button_visual_blue-background:hover {
+  background: #4089d3;
+  border: none;
 }
