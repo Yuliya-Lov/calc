@@ -97,3 +97,5 @@ export const buttonArr: Array<Content> = [
   export const converters: Array<string> = ['+/-', '%'];
 
   export const cleaner:string = 'C';
+
+  export const equalizer:string = '=';

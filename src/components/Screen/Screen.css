@@ -89,3 +89,7 @@
   color: #ECECEC;
   font-size: 40px;
 }
+
+.screen__line_low {
+  font-size: 22px;
+}

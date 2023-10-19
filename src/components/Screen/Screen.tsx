@@ -7,7 +7,7 @@ function Screen({ result, task, theme, changeTheme }: { result: string | undefin
       <button onClick={changeTheme} className={`screen__theme-button screen__theme-button_theme_${theme}`} />
       <form className='screen__form'>
         <p className='screen__line screen__line_type_task'>{task.join('')}</p>
-        <p className={`screen__line screen__line_type_input screen__line_theme_${theme}`}>{result}</p>
+        <p className={`screen__line screen__line_type_input screen__line_theme_${theme} ${result && result.length > 11 ? 'screen__line_low': ''}`}>{result}</p>
       </form>
 
     </section>

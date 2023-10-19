@@ -11,7 +11,8 @@ import {
   nums,
   actions,
   converters,
-  cleaner
+  cleaner,
+  equalizer
 } from '../../utils/constants';
 
 
@@ -19,7 +20,8 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const [theme, setTheme] = React.useState<string>('light');
-  const [currentItem, setCurrentItem] = React.useState<string>('');
+  const [currentItem, setCurrentItem] = React.useState<string>('0');
+  const [currentPair, setCurrentPair] = React.useState<Array<string>>([]);
   const [task, setTask] = React.useState<Array<string>>([]);
   const [result, setResult] = React.useState<string>('0');
   const [interimResult, setInterimResult] = React.useState<string | undefined>();
@@ -54,7 +56,7 @@ function App() {
       return (+num1 * +num2).toString();
     }
     if (action === '/') {
-      if (num2 === '0') return 'Деление на ноль невозможно!';
+      if (num2 === '0') return 'Деление на ноль невозможно';
       return (+num1 / +num2).toString();
     }
     else {
@@ -62,17 +64,23 @@ function App() {
     }
   }
 
-  function handleCleaner(): void {
+  function setInitialState(): void {
     setTask([])
     setResult('0');
     setInterimResult(undefined);
     setCurrentItem('');
   }
+  function deleteLast(): void {
+    if (currentItem !== '0') {
+      setCurrentItem('0'),
+        setResult('0')
+    }
+  }
 
-  function handleAction(action: string): void {
+  function getResult(): void {
     if (task.length > 1) {
       const pair = task.slice(task.length - 4, task.length - 1).filter(i => i !== ' ')
-      console.log(pair)
+      console.log('pair', pair)
       const activePair = interimResult
         ? [interimResult, pair[1], currentItem]
         : [...pair, currentItem]
@@ -81,23 +89,67 @@ function App() {
     } else {
       setResult(currentItem);
     }
-    setTask([...task, currentItem, ' ', action, ' ']);
-    setCurrentItem('');
+  }
+
+  function handleAction(action: string): void {
+    if (currentItem !== '') {
+      getResult();
+      setTask([...task, currentItem, ' ', action, ' ']);
+      setCurrentItem('');
+    } else {
+      if (task.length > 3) {
+        setTask(task.map((i, index) => {
+          if (index === task.length - 2) {
+            return action
+          } else {
+            return i;
+          }
+        }));
+      }
+    }
+  }
+
+  function handleEqualizer(equalizer: string): void {
+    if (task.length > 0) {
+      getResult();
+      console.log(task.concat(currentItem, equalizer));
+      setCurrentItem(result);
+    } else {
+      setResult(task[0]);
+      setCurrentItem(task[0]);
+    }
+    setTask([]);
+    setInterimResult(undefined);
   }
 
   function handleNum(num: string): void {
     const newNum = currentItem.length < 16 ? currentItem.concat(num.toString()) : currentItem;
-    setCurrentItem(newNum);
-    setResult(newNum)
+    if (currentItem === '0' || currentItem === '') {
+      if (num.includes('0')) {
+        setCurrentItem('0');
+        setResult('0')
+      } else {
+        setCurrentItem(num);
+        setResult(num);
+      }
+    } else {
+      setCurrentItem(newNum);
+      setResult(newNum)
+    }
   }
 
+
   function handleConverter(converter: string): void {
-    console.log(converter)
-    if (converter === '+/-') {
+    if (converter === '+/-' && currentItem) {
       setCurrentItem((+currentItem * -1).toString());
+      setResult((+currentItem * -1).toString());
     }
     if (converter === '%') {
-      console.log(currentItem, '%  от', task[task.length - 1])
+      if (task.length > 3) {
+        const newNum = interimResult ? +interimResult * +currentItem / 100 : +task[task.length - 4] * +currentItem / 100;
+        setCurrentItem(newNum.toString());
+        setResult(newNum.toString())
+      }
     }
   }
 
@@ -114,11 +166,13 @@ function App() {
         handleConverter(val)
       }
       if (val === cleaner) {
-        handleCleaner()
+        setInitialState()
+      }
+      if (val === equalizer) {
+        handleEqualizer(val)
       }
     }
   }
-
 
 
   return (
@@ -126,7 +180,7 @@ function App() {
       <div className={`app app_theme_${theme}`}>
         <CalcShell theme={theme}>
           <Screen result={result} task={task} theme={theme} changeTheme={changeTheme} />
-          <ControlPanel theme={theme} toggleHistory={toggleHistory} />
+          <ControlPanel theme={theme} toggleHistory={toggleHistory} deleteLast={deleteLast} />
           <Routes>
             <Route path='/' element={
               <ButtonArea theme={theme} handleSimbol={handleSimbol} />
