@@ -24,8 +24,8 @@ function App() {
   const [currentPair, setCurrentPair] = React.useState<Array<string>>([]);
   const [task, setTask] = React.useState<Array<string>>([]);
   const [result, setResult] = React.useState<string>('0');
-  const [interimResult, setInterimResult] = React.useState<string | undefined>();
-  const exArr = ['1 + 2 = 4', 'foo'];
+  const data: string | null = localStorage.getItem('calc-history');
+  const [historyArr, setHistoryArr] = React.useState<Array<string>>(typeof data === 'string' ? JSON.parse(data) : []);
 
   function changeTheme(): void {
     if (theme === 'light') {
@@ -44,20 +44,20 @@ function App() {
     }
   }
 
-  function handlePair([num1, action, num2]: Array<string>): string {
+  function handlePair([num1, action, num2]: Array<string>): string | number {
     console.log(num1, action, num2);
     if (action === '+') {
-      return (+num1 + +num2).toString();
+      return (+num1 + +num2);
     }
     if (action === '-') {
-      return (+num1 - +num2).toString();
+      return (+num1 - +num2);
     }
     if (action === '*') {
-      return (+num1 * +num2).toString();
+      return (+num1 * +num2);
     }
     if (action === '/') {
       if (num2 === '0') return 'Деление на ноль невозможно';
-      return (+num1 / +num2).toString();
+      return (+num1 / +num2);
     }
     else {
       return 'Результат не определен'
@@ -65,11 +65,12 @@ function App() {
   }
 
   function setInitialState(): void {
-    setTask([])
+    setTask([]);
+    setCurrentPair([]);
+    setCurrentItem('0');
     setResult('0');
-    setInterimResult(undefined);
-    setCurrentItem('');
   }
+
   function deleteLast(): void {
     if (currentItem !== '0') {
       setCurrentItem('0'),
@@ -77,54 +78,87 @@ function App() {
     }
   }
 
-  function getResult(): void {
-    if (task.length > 1) {
-      const pair = task.slice(task.length - 4, task.length - 1).filter(i => i !== ' ')
-      console.log('pair', pair)
-      const activePair = interimResult
-        ? [interimResult, pair[1], currentItem]
-        : [...pair, currentItem]
-      setInterimResult(handlePair(activePair))
-      setResult(handlePair(activePair))
-    } else {
-      setResult(currentItem);
-    }
+
+  function clearHistory(): void {
+    setHistoryArr([]);
+  }
+
+  function changeLastAction(action: string): void {
+    setCurrentPair(currentPair.map((i, index) => {
+      if (index === currentPair.length - 1) {
+        return action
+      } else {
+        return i;
+      }
+    }))
+    setTask(task.map((i, index) => {
+      if (index === task.length - 2) {
+        return action
+      } else {
+        return i;
+      }
+    }));
   }
 
   function handleAction(action: string): void {
-    if (currentItem !== '') {
-      getResult();
-      setTask([...task, currentItem, ' ', action, ' ']);
-      setCurrentItem('');
-    } else {
-      if (task.length > 3) {
-        setTask(task.map((i, index) => {
-          if (index === task.length - 2) {
-            return action
-          } else {
-            return i;
-          }
-        }));
+    if (currentItem === '') {
+      changeLastAction(action);
+      if (currentPair.length === 1) {
+        setCurrentPair([...currentPair, action])
+        setTask([currentPair[0], ' ', action, ' '])
       }
+    }
+    if (currentItem.length > 0) {
+      setTask([...task, currentItem, ' ', action, ' ']);
+      if (currentPair.length === 0) {
+        setCurrentPair([...currentPair, currentItem, action])
+      }
+      if (currentPair.length === 1) {
+        setCurrentPair([currentItem, action])
+      }
+      if (currentPair.length === 2) {
+        const actualResult = handlePair([...currentPair, currentItem]);
+        if (typeof actualResult === 'number') {
+          setCurrentPair([actualResult.toString(), action]);
+          setResult(actualResult.toString())
+        } else {
+          setResult(actualResult);
+          setTask([])
+          setCurrentPair([]);
+        }
+      }
+      setCurrentItem('');
     }
   }
 
   function handleEqualizer(equalizer: string): void {
+    if (task.length === 0) {
+      setResult(currentItem);
+      setCurrentPair([currentItem]);
+    }
     if (task.length > 0) {
-      getResult();
-      console.log(task.concat(currentItem, equalizer));
-      setCurrentItem(result);
-    } else {
-      setResult(task[0]);
-      setCurrentItem(task[0]);
+      if (currentItem.length === 0) {
+        setResult(currentPair[0]);
+      } else {
+        const actualResult = handlePair([...currentPair, currentItem]);
+        if (typeof actualResult === 'number') {
+          setHistoryArr([task.concat(' ', currentItem, ' ', equalizer, ' ', actualResult.toString()).join(''), ...historyArr])
+          setCurrentPair([actualResult.toString()]);
+          setCurrentItem('')
+          setResult(actualResult.toString());
+        } else {
+          setResult(actualResult);
+          setTask([])
+          setCurrentPair([]);
+        }
+      }
     }
     setTask([]);
-    setInterimResult(undefined);
   }
 
   function handleNum(num: string): void {
     const newNum = currentItem.length < 16 ? currentItem.concat(num.toString()) : currentItem;
-    if (currentItem === '0' || currentItem === '') {
+    if (currentItem === '0') {
       if (num.includes('0')) {
         setCurrentItem('0');
         setResult('0')
@@ -140,13 +174,20 @@ function App() {
 
 
   function handleConverter(converter: string): void {
-    if (converter === '+/-' && currentItem) {
-      setCurrentItem((+currentItem * -1).toString());
-      setResult((+currentItem * -1).toString());
+    if (converter === '+/-') {
+      console.log(currentPair, 'currentPair')
+      if (currentItem.length > 0) {
+        setCurrentItem((+currentItem * -1).toString());
+        setResult((+currentItem * -1).toString());
+      }
+      if (currentPair.length === 1) {
+        setCurrentPair([(+currentPair[0] * -1).toString()])
+        setResult((+currentPair[0] * -1).toString());
+      }
     }
     if (converter === '%') {
       if (task.length > 3) {
-        const newNum = interimResult ? +interimResult * +currentItem / 100 : +task[task.length - 4] * +currentItem / 100;
+        const newNum = +task[task.length - 4] * +currentItem / 100;
         setCurrentItem(newNum.toString());
         setResult(newNum.toString())
       }
@@ -174,6 +215,10 @@ function App() {
     }
   }
 
+  React.useEffect(() => {
+    localStorage.setItem('calc-history', JSON.stringify(historyArr));
+  }, [historyArr])
+
 
   return (
     <CurrentThemeContext.Provider value={theme}>
@@ -186,7 +231,7 @@ function App() {
               <ButtonArea theme={theme} handleSimbol={handleSimbol} />
             } />
             <Route path='/history' element={
-              <History theme={theme} exArr={exArr} />
+              <History theme={theme} historyArr={historyArr} clearHistory={clearHistory} />
             } />
           </Routes>
         </CalcShell>

@@ -1,19 +1,18 @@
-import React from 'react';
 import { ReactNode } from 'react';
-import './History.css'
+import './History.css';
 
-function History({theme, exArr }: { theme: string, exArr: Array<string> }) {
+function History({theme, historyArr, clearHistory }: { theme: string, historyArr: Array<string>, clearHistory() :void}) {
   return (
     <section aria-label='История вычислений' className={`history history_theme_${theme}`}>
       <ul className='history__list'>
-        {exArr.map((item: string): ReactNode => {
+        {historyArr.map((item: string): ReactNode => {
           return (
-            <li key={exArr.indexOf(item)} className={`history__item history__item_theme_${theme}`}>{item}</li>
+            <li key={historyArr.indexOf(item)} className={`history__item history__item_theme_${theme}`}>{item}</li>
           )
         })
         }
       </ul>
-      <button className={`history__clean-button history__clean-button_theme_${theme}`}>Отчистить историю</button>
+      <button onClick={clearHistory} className={`history__clean-button history__clean-button_theme_${theme}`}>Отчистить историю</button>
     </section>
   );
 }

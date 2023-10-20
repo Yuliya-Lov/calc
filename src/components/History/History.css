@@ -25,7 +25,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 22px;
 }
 
 .history__item {
@@ -34,7 +34,7 @@
   cursor: pointer;
   color: #9A9B9B;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 22px;
 }
 
 .history__item_theme_light {
