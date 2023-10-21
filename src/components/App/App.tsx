@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
 import './App.css';
 import { CurrentThemeContext } from '../../contexts/CurrentThemeContext';
 import CalcShell from '../CalcShell/CalcShell';
@@ -71,12 +72,12 @@ function App() {
   }
 
   function deleteLastSimb(): void {
-    if (currentItem.length <= 1 ) {
+    if (currentItem.length <= 1) {
       setCurrentItem('0'),
         setResult('0')
     } else {
       setCurrentItem(currentItem.slice(0, currentItem.length - 1)),
-      setResult(currentItem.slice(0, currentItem.length - 1))
+        setResult(currentItem.slice(0, currentItem.length - 1))
     }
   }
 
@@ -161,6 +162,7 @@ function App() {
   }
 
   function handleNum(num: string): void {
+    console.log(num)
     const newNum = currentItem.length < 16 ? currentItem.concat(num.toString()) : currentItem;
     if (currentItem === '0' || currentItem === '') {
       if (num.includes('0')) {
@@ -227,27 +229,74 @@ function App() {
     }
   }
 
+
+  const handleKeyPressValue = (e: KeyboardEvent): void => {
+    e.preventDefault()
+    console.log('GeneRalevent', e.key);
+    if (e.key === "Enter") {
+      console.log('event', e.key);
+      handleEqualizer("=")
+    }
+    if (e.key === "Escape") {
+      console.log('event', e.key);
+      setInitialState()
+    }
+    if (e.key === "Backspace") {
+      console.log('event', e.key);
+      deleteLastSimb()
+    }
+    if (nums.includes(e.key)) {
+      console.log('event', e.key);
+      handleNum(e.key)
+    }
+    if (actions.includes(e.key)) {
+      console.log('event', e.key);
+      handleAction(e.key)
+    }
+    if (actions.includes(e.key)) {
+      console.log('event', e.key);
+      handleAction(e.key)
+    }
+    if (e.key === '%') {
+      console.log('event', e.key);
+      handleConverter(e.key)
+    }
+  }
+
+
+  function handleKeyDown(key: string, e: KeyboardEvent): void {
+    console.log(`Key ${key} was pressed in ${e.code}`);
+  }
+
+  // window.addEventListener('keyup', handleKeyPressValue(e: KeyboardEvent));
+
   React.useEffect(() => {
     localStorage.setItem('calc-history', JSON.stringify(historyArr));
   }, [historyArr])
 
+  /*   React.useEffect(() => {
+      window.addEventListener('keydown', (e): void => handleKeyPressValue(e));
+    }, [])
+   */
 
   return (
     <CurrentThemeContext.Provider value={theme}>
-      <div className={`app app_theme_${theme}`}>
-        <CalcShell theme={theme}>
-          <Screen result={result} task={task} theme={theme} changeTheme={changeTheme} />
-          <ControlPanel theme={theme} toggleHistory={toggleHistory} deleteLast={deleteLastSimb} />
-          <Routes>
-            <Route path='/' element={
-              <ButtonArea theme={theme} handleSimbol={handleSimbol} />
-            } />
-            <Route path='/history' element={
-              <History theme={theme} historyArr={historyArr} clearHistory={clearHistory} />
-            } />
-          </Routes>
-        </CalcShell>
-      </div>
+      <KeyboardEventHandler onKeyEvent={() => console.log('[f[f[f[')}>
+        <div className={`app app_theme_${theme}`}>
+          <CalcShell theme={theme}>
+            <Screen result={result} task={task} theme={theme} changeTheme={changeTheme} />
+            <ControlPanel theme={theme} toggleHistory={toggleHistory} deleteLast={deleteLastSimb} />
+            <Routes>
+              <Route path='/' element={
+                <ButtonArea theme={theme} handleSimbol={handleSimbol} />
+              } />
+              <Route path='/history' element={
+                <History theme={theme} historyArr={historyArr} clearHistory={clearHistory} />
+              } />
+            </Routes>
+          </CalcShell>
+        </div>
+      </KeyboardEventHandler>
     </CurrentThemeContext.Provider>
   )
 }
