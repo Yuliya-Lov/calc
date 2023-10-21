@@ -1,4 +1,3 @@
-import React from 'react';
 import './Screen.css';
 
 function Screen({ result, task, theme, changeTheme }: { result: string | undefined, task: Array<string | undefined>, theme: string, changeTheme(): void }) {
@@ -6,8 +5,8 @@ function Screen({ result, task, theme, changeTheme }: { result: string | undefin
     <section aria-label='Экран' className='screen'>
       <button onClick={changeTheme} className={`screen__theme-button screen__theme-button_theme_${theme}`} />
       <form className='screen__form'>
-        <p className='screen__line screen__line_type_task'>{task.join('')}</p>
-        <p className={`screen__line screen__line_type_input screen__line_theme_${theme} ${result && result.length > 11 ? 'screen__line_low': ''}`}>{result}</p>
+        <p className={`screen__line screen__line_type_task screen__line_scroll_${theme}`}>{task.join('')}</p>
+        <p className={`screen__line screen__line_type_result screen__line_theme_${theme} ${result && result.length > 11 ? 'screen__line_low': ''}`}>{result}</p>
       </form>
 
     </section>

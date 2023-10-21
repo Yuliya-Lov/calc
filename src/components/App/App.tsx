@@ -36,7 +36,6 @@ function App() {
   }
 
   function toggleHistory(): void {
-    console.log(location);
     if (location.pathname === '/') {
       navigate('/history', { replace: true });
     } else {
@@ -71,10 +70,13 @@ function App() {
     setResult('0');
   }
 
-  function deleteLast(): void {
-    if (currentItem !== '0') {
+  function deleteLastSimb(): void {
+    if (currentItem.length <= 1 ) {
       setCurrentItem('0'),
         setResult('0')
+    } else {
+      setCurrentItem(currentItem.slice(0, currentItem.length - 1)),
+      setResult(currentItem.slice(0, currentItem.length - 1))
     }
   }
 
@@ -142,7 +144,9 @@ function App() {
       } else {
         const actualResult = handlePair([...currentPair, currentItem]);
         if (typeof actualResult === 'number') {
-          setHistoryArr([task.concat(' ', currentItem, ' ', equalizer, ' ', actualResult.toString()).join(''), ...historyArr])
+          historyArr.length < 10
+            ? setHistoryArr([task.concat(' ', currentItem, ' ', equalizer, ' ', actualResult.toString()).join(''), ...historyArr])
+            : setHistoryArr([task.concat(' ', currentItem, ' ', equalizer, ' ', actualResult.toString()).join(''), ...historyArr.slice(0, historyArr.length - 1)])
           setCurrentPair([actualResult.toString()]);
           setCurrentItem('')
           setResult(actualResult.toString());
@@ -158,17 +162,25 @@ function App() {
 
   function handleNum(num: string): void {
     const newNum = currentItem.length < 16 ? currentItem.concat(num.toString()) : currentItem;
-    if (currentItem === '0') {
+    if (currentItem === '0' || currentItem === '') {
       if (num.includes('0')) {
         setCurrentItem('0');
         setResult('0')
+      } else if (num.includes('.')) {
+        setCurrentItem('0.');
+        setResult('0.')
       } else {
         setCurrentItem(num);
         setResult(num);
       }
     } else {
-      setCurrentItem(newNum);
-      setResult(newNum)
+      if (num.includes('.') && currentItem.includes('.')) {
+        setCurrentItem(currentItem);
+        setResult(currentItem)
+      } else {
+        setCurrentItem(newNum);
+        setResult(newNum)
+      }
     }
   }
 
@@ -225,7 +237,7 @@ function App() {
       <div className={`app app_theme_${theme}`}>
         <CalcShell theme={theme}>
           <Screen result={result} task={task} theme={theme} changeTheme={changeTheme} />
-          <ControlPanel theme={theme} toggleHistory={toggleHistory} deleteLast={deleteLast} />
+          <ControlPanel theme={theme} toggleHistory={toggleHistory} deleteLast={deleteLastSimb} />
           <Routes>
             <Route path='/' element={
               <ButtonArea theme={theme} handleSimbol={handleSimbol} />

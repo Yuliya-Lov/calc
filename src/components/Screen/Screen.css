@@ -64,6 +64,7 @@
   text-align: end;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   font-weight: 500;
   letter-spacing: -0.3px;
   overflow: hidden;
@@ -72,12 +73,48 @@
 }
 
 .screen__line_type_task {
+  box-sizing: border-box;
+  padding: 6px;
   color: #9A9B9B;
+  align-items: flex-start;
   font-size: 20px;
+  max-height: 129px;
+  overflow-x: hidden;
+  overflow-y: overlay;
 }
 
-.screen__line_type_input:focus-visible {
- outline: none;
+.screen__line_type_task::-webkit-scrollbar-track {
+  border: none;
+  padding: 2px 0;
+  background-color: #d5dee7;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 25px;
+  color: rgb(100, 167, 236);
+}
+
+.screen__line_type_task::-webkit-scrollbar {
+  width: 8px;
+}
+
+.screen__line_type_task::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, .2);
+  background-color: #bfdbf8;
+  border: none;
+}
+
+.screen__line_scroll_dark::-webkit-scrollbar-track {
+  background-color: #404040;
+}
+
+.screen__line_scroll_dark::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+  background-color: #737272;
+}
+
+.screen__line_type_result:focus-visible {
+  outline: none;
 }
 
 .screen__line_theme_light {
@@ -92,4 +129,5 @@
 
 .screen__line_low {
   font-size: 22px;
+  min-height: 47px;
 }
