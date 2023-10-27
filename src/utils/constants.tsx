@@ -96,6 +96,6 @@ export const buttonArr: Array<Content> = [
   export const actions: Array<string> = ['+', '-', '*', '/'];
   export const converters: Array<string> = ['+/-', '%'];
 
-  export const cleaners:Array<string> = ['C', "Backspace"];
+  export const cleaners:Array<string> = ['Escape','C', 'Backspace'];
 
-  export const equalizers:Array<string> = ['=', "Enter" ];
+  export const equalizers:Array<string> = ['=', 'Enter' ];

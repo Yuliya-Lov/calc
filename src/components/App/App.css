@@ -9,13 +9,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  -webkit-transition: background-color 1000ms linear;
+  -ms-transition: background-color 1000ms linear;
+  transition: background-color 1000ms linear;
 
 }
 
 .app_theme_light {
-  background-image: url(../../assets/light-background.png);
+  background-color: #F6F6F6;
+ /*  background-image: url(../../assets/light-background.png); */
 }
 
 .app_theme_dark {
-  background-image: url(../../assets/dark-background.png);
+  background-color: #2D3032;
+ /*  background-image: url(../../assets/dark-background.png); */
 }

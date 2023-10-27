@@ -136,10 +136,15 @@ function App() {
     }
   }
 
-  function handleEqualizer(equalizer: string): void {
+  function handleEqualizer(): void {
     if (task.length === 0) {
-      setResult(currentItem);
-      setCurrentPair([currentItem]);
+      if (currentItem) {
+        setResult(currentItem);
+        setCurrentPair([currentItem]);
+      } else {
+        setResult('0');
+        setCurrentPair(['0']);
+      }
     }
     if (task.length > 0) {
       if (currentItem.length === 0) {
@@ -148,8 +153,8 @@ function App() {
         const actualResult = handlePair([...currentPair, currentItem]);
         if (typeof actualResult === 'number') {
           historyArr.length < 10
-            ? setHistoryArr([task.concat(' ', currentItem, ' ', equalizer, ' ', actualResult.toString()).join(''), ...historyArr])
-            : setHistoryArr([task.concat(' ', currentItem, ' ', equalizer, ' ', actualResult.toString()).join(''), ...historyArr.slice(0, historyArr.length - 1)])
+            ? setHistoryArr([task.concat(' ', currentItem, ' = ', actualResult.toString()).join(''), ...historyArr])
+            : setHistoryArr([task.concat(' ', currentItem, ' = ', actualResult.toString()).join(''), ...historyArr.slice(0, historyArr.length - 1)])
           setCurrentPair([actualResult.toString()]);
           setCurrentItem('')
           setResult(actualResult.toString());
@@ -164,10 +169,10 @@ function App() {
   }
 
   function handleNum(num: string): void {
-    console.log('result', result)
+    console.log(' выходящее значение currentItem', currentItem)
+    console.log('видно ли в ф-ции значение: начало', num, typeof num)
     const newNum = currentItem.length < 16 ? currentItem.concat(num.toString()) : currentItem;
     if (currentItem === '0' || currentItem === '') {
-      console.log('num1')
       if (num.includes('0')) {
         setCurrentItem('0');
         setResult('0')
@@ -179,19 +184,18 @@ function App() {
       } else {
         setCurrentItem(num);
         setResult(num);
-        console.log('current', currentItem)
+        console.log('видно ли в ф-ции значение: конец', num)
         return;
       }
     } else {
-      console.log('num2')
       if (num.includes('.') && currentItem.includes('.')) {
         setCurrentItem(currentItem);
         setResult(currentItem)
-        console.log('current', currentItem)
         return;
       } else {
         setCurrentItem(newNum);
         setResult(newNum)
+        console.log('видно ли в ф-ции значение: конец', num)
         return;
       }
     }
@@ -221,7 +225,6 @@ function App() {
 
 
   function handleSimbol(val: string): void {
-    console.log(val, typeof val);
     if (val) {
       if (nums.includes(val)) {
         handleNum(val)
@@ -236,19 +239,22 @@ function App() {
         return;
       }
       if (cleaners.includes(val)) {
-        console.log(val);
-        setInitialState()
-        return;
+        if (val === 'Backspace') {
+          deleteLastSimb()
+          return;
+        } else {
+          setInitialState()
+          return;
+        }
       }
       if (equalizers.includes(val)) {
-        handleEqualizer(val)
+        handleEqualizer()
         return;
       }
     }
   }
 
   function pointKeyValue(e: KeyboardEvent): void {
-    console.log(e);
     handleSimbol(e.key)
   }
 
@@ -257,11 +263,15 @@ function App() {
   }, [historyArr])
 
   React.useEffect(() => {
+    if (document.activeElement) {
+      const focusEl: HTMLButtonElement = document.activeElement;
+      focusEl.blur()
+    }
     window.addEventListener('keydown', pointKeyValue);
     return () => {
       window.removeEventListener('keydown', pointKeyValue);
     }
-  }, [])
+  }, [pointKeyValue])
 
 
   return (
